@@ -75,7 +75,7 @@ function Page() {
             </form>
             {response &&
                 <div
-                    className='gap-6 flex flex-col w-full  '
+                    className='gap-6 flex flex-col w-screen  '
                 >
                     <DivUi>
                         <p className='text-xl text-slate-800 font-bold '>
@@ -174,11 +174,21 @@ function Page() {
                                 )
                             })
                         }
+                        <p className='text-xl text-slate-800 font-bold '> Play Audio Sample Here : </p>
+                        <video
+                            src={response.downloadUrl.find((item: any) => item.quality === "320kbps")?.url}
+                            className='w-72 h-10 rounded-md mx-auto'
+                            controls={true}
+                            // autoPlay = {true}
+                        >
+                            v
+                        </video>
                         <Copy_btn
                             textToCopy={response.downloadUrl.find((item: any) => item.quality === "320kbps")?.url}
                             copyBtnText='Copy Music Link 320kbps'
                             className=''
                         />
+
                     </DivUi>
 
                     <DivUi
