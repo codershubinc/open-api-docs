@@ -7,7 +7,7 @@ import React from 'react'
 function Other({ response }: { response: any }) {
     return (
         <DivUi
-            className='flex flex-col gap-2 w-fit '
+            className='flex flex-col gap-2 w-fit m-w-[50%] '
         >
             <p
                 className='text-xl text-slate-800 font-bold '
