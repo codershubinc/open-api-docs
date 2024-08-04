@@ -77,6 +77,9 @@ function Page() {
                     className='gap-6 flex flex-col w-full  '
                 >
                     <DivUi>
+                        <p className='text-xl text-slate-800 font-bold '>
+                            Title
+                        </p>
                         <h1 className='text-3xl font-bold '>
                             {DecodeHTMLEntities(response.name)}
                         </h1>
@@ -89,6 +92,7 @@ function Page() {
                         }
                     </DivUi>
                     <DivUi>
+                        <p className='text-xl text-slate-800 font-bold '>Artists</p>
                         {
                             response.artists.primary.map((item: any) => {
                                 return (
@@ -104,13 +108,14 @@ function Page() {
                         />
                     </DivUi>
                     <DivUi>
+                        <p className='text-xl text-slate-800 font-bold '>Image</p>
                         {response.image &&
                             response.image.map((item: any) => {
                                 if (item.quality === "50x50") {
                                     return <img
                                         key={item.url}
                                         src={item.url}
-                                        className='w-7 h-7'
+                                        className='w-10 h-10 rounded-md'
                                     />
                                 }
                             })
@@ -124,8 +129,32 @@ function Page() {
                                 className=''
                             />
                         }
+                    </DivUi>
+                    <DivUi>
+                        <p className='text-xl text-slate-800 font-bold '>Music Links</p>
+                        {
+                            response.downloadUrl.map((item: any) => {
+                                return (
+                                    <div key={item.url}>
 
+                                        <a
+                                            className='text-slate-800 font-bold'
+                                            href={item.url}
+                                            target='_blank'
+                                            rel='noreferrer'
+                                        >
+                                            {item.quality}
+                                        </a>
 
+                                    </div>
+                                )
+                            })
+                        }
+                        <Copy_btn
+                            textToCopy={response.downloadUrl.find((item: any) => item.quality === "320kbps")?.url}
+                            copyBtnText='Copy Music Link 320kbps'
+                            className=''
+                        />
                     </DivUi>
                 </div>
             }
