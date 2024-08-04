@@ -9,6 +9,11 @@ import { Input } from '@/components/ui/input'
 import DecodeHTMLEntities from '@/utils/func/htmlDecode'
 import Saavn from '@/utils/func/saavnCDN/fetchApi'
 import React, { useState } from 'react'
+import Other from './other'
+import Music from './music'
+import Image from './image'
+import FeaturedArtists from './featuredArtists'
+import Artists from './artists'
 
 function Page() {
 
@@ -16,6 +21,11 @@ function Page() {
     const [error, setError] = useState('')
     const [link, setLink] = useState('')
     const [response, setResponse] = useState<any>(null)
+
+
+
+
+
 
     const loadSong = async () => {
         setLoading(true)
@@ -26,9 +36,9 @@ function Page() {
                 setError('Something went wrong')
             }
             const data = await response.json()
-            console.log(data)
+            // console.log(data)
             setResponse(data.data.data[0])
-            console.log('data', data.data.data[0])
+            // console.log('data', data.data.data[0])
 
             setLoading(false)
         } catch (error) {
@@ -54,6 +64,7 @@ function Page() {
             <h1 className='text-3xl font-bold '>
                 saavnCDN
             </h1>
+            {/* input form */}
             <form
                 className='flex flex-col justify-center items-center h-max  bg-black'
                 onSubmit={(e) => {
@@ -77,6 +88,7 @@ function Page() {
                 <div
                     className='gap-6 flex flex-col w-screen  '
                 >
+                    {/* title */}
                     <DivUi>
                         <p className='text-xl text-slate-800 font-bold '>
                             Title
@@ -92,134 +104,23 @@ function Page() {
                             />
                         }
                     </DivUi>
-                    <DivUi>
-                        <p className='text-xl text-slate-800 font-bold '>Artists</p>
-                        {
-                            response.artists.primary.map((item: any) => {
-                                return (
-                                    <p key={item.name} >{DecodeHTMLEntities(item.name)}</p>
-                                )
-                            })
+                    {/* artists */}
+                    <Artists response={response} />
 
-                        }
-                        <Copy_btn
-                            textToCopy={DecodeHTMLEntities(response.artists.primary.map((item: any) => item.name).join(','))}
-                            copyBtnText='Copy Artist'
-                            className=''
-                        />
-                    </DivUi>
+                    {/* featured artist */}
+                    <FeaturedArtists response={response} />
 
-                    {
-                        response.artists.featured.length > 0 &&
-                        <>
-                            <DivUi>
-                                <p className='text-xl text-slate-800 font-bold '>Featured Artist</p>
-                                {
-                                    response.artists.featured.map((item: any) => {
-                                        return (
-                                            <p key={item.name} >{DecodeHTMLEntities(item.name)}</p>
-                                        )
-                                    })
 
-                                }
-                                <Copy_btn
-                                    textToCopy={DecodeHTMLEntities(response.artists.featured.map((item: any) => item.name).join(','))}
-                                    copyBtnText='Copy Featured Artist'
-                                    className=''
-                                />
-                            </DivUi>
-                        </>
-                    }
+                    {/* image links and image sample */}
+                    <Image response={response} />
 
-                    <DivUi>
-                        <p className='text-xl text-slate-800 font-bold '>Image</p>
-                        {response.image &&
-                            response.image.map((item: any) => {
-                                if (item.quality === "50x50") {
-                                    return <img
-                                        key={item.url}
-                                        src={item.url}
-                                        className='w-10 h-10 rounded-md'
-                                    />
-                                }
-                            })
-                        }
-                        {response.image &&
-                            <Copy_btn
-                                textToCopy={
-                                    response.image.find((item: any) => item.quality === "500x500")?.url
-                                }
-                                copyBtnText='Copy Image URL 500x500'
-                                className=''
-                            />
-                        }
-                    </DivUi>
-                    <DivUi>
-                        <p className='text-xl text-slate-800 font-bold '>Music Links</p>
-                        {
-                            response.downloadUrl.map((item: any) => {
-                                return (
-                                    <div key={item.url}>
 
-                                        <a
-                                            className='text-slate-800 font-bold'
-                                            href={item.url}
-                                            target='_blank'
-                                            rel='noreferrer'
-                                        >
-                                            {item.quality}
-                                        </a>
+                    {/* music links and audio sample */}
+                    <Music response={response} />
 
-                                    </div>
-                                )
-                            })
-                        }
-                        <p className='text-xl text-slate-800 font-bold '> Play Audio Sample Here : </p>
-                        <video
-                            src={response.downloadUrl.find((item: any) => item.quality === "320kbps")?.url}
-                            className='w-72 h-10 rounded-md mx-auto'
-                            controls={true}
-                            // autoPlay = {true}
-                        >
-                            v
-                        </video>
-                        <Copy_btn
-                            textToCopy={response.downloadUrl.find((item: any) => item.quality === "320kbps")?.url}
-                            copyBtnText='Copy Music Link 320kbps'
-                            className=''
-                        />
 
-                    </DivUi>
-
-                    <DivUi
-                        className='flex flex-col gap-2 w-fit '
-                    >
-                        <p
-                            className='text-xl text-slate-800 font-bold '
-                        >
-                            Other Info :
-                        </p>
-                        <DivUi>
-                            <p className='text-slate-800 text-xl '> Label: </p>
-                            {DecodeHTMLEntities(response.label)}
-                        </DivUi>
-                        <DivUi>
-                            <p className='text-slate-800 text-xl '> playCount: </p>
-                            {DecodeHTMLEntities(response.playCount)}
-                        </DivUi>
-                        <DivUi>
-                            <p className='text-slate-800 text-xl '> releaseDate: </p>
-                            {DecodeHTMLEntities(response.releaseDate)}
-                        </DivUi>
-                        <DivUi>
-                            <p className='text-slate-800 text-xl '> language: </p>
-                            {DecodeHTMLEntities(response.language)}
-                        </DivUi>
-                        <DivUi>
-                            <p className='text-slate-800 text-xl '> copyright: </p>
-                            {DecodeHTMLEntities(response.copyright)}
-                        </DivUi>
-                    </DivUi>
+                    {/* other info */}
+                    <Other response={response} />
 
 
                 </div>
