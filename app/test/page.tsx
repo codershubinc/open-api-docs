@@ -11,7 +11,16 @@ function Page() {
         fetchUtil('https://test-backend-0.vercel.app/')
     }, [])
     return (
-        <div>page</div>
+        <div>
+            <input type="text" name="url" id="url" />
+            <button
+                onClick={() => {
+                    const url = (document.getElementById('url') as HTMLInputElement).value
+                    fetchUtil(url)
+                }}
+
+            >fetch</button>
+        </div>
     )
 }
 
